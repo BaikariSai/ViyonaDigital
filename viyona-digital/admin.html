@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Viyona Digital</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- ============================================================
+     LOGIN PAGE
+     ============================================================ -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">Viyona<span>Digital</span></div>
+    <p class="login-subtitle">🔐 Admin Portal — Authorised Access Only</p>
+
+    <div id="loginForm">
+      <div class="login-field">
+        <label for="loginEmail">Email Address</label>
+        <input type="email" id="loginEmail" placeholder="admin@viyonadigital.com" autocomplete="username" />
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" placeholder="Enter admin password" autocomplete="current-password" />
+      </div>
+      <button class="login-btn" id="loginBtn">Sign In →</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+
+    <p style="text-align:center;margin-top:24px;font-size:.82rem;color:#a8a29e;">
+      <a href="index.html" style="color:var(--orange-500);font-weight:600;">← Back to Website</a>
+    </p>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     ADMIN SHELL (shown after login)
+     ============================================================ -->
+<div id="admin-shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Viyona<span>Digital</span></div>
+
+    <div class="sidebar-section-label">Main Menu</div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-panel="leads">
+        <span class="nav-ico">📋</span> Leads
+      </button>
+      <button class="nav-item" data-panel="editables">
+        <span class="nav-ico">🔧</span> Editables
+      </button>
+      <button class="nav-item" data-panel="about">
+        <span class="nav-ico">👤</span> About Admin
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">
+        <span>🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ── -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Admin Dashboard</h1>
+      <span class="admin-badge">Viyona Digital CRM</span>
+    </div>
+
+    <!-- ══ LEADS PANEL ══ -->
+    <div class="admin-panel active" id="panel-leads">
+      <div class="leads-topbar">
+        <h2>📋 Lead Management</h2>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="download-btn" id="downloadLeads">⬇️ Download Excel</button>
+          <button class="download-btn" id="clearLeadsBtn" style="background:#dc2626;">🗑️ Clear All</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="leads-stats">
+        <div class="stat-card">
+          <div class="s-num" id="totalLeads">0</div>
+          <div class="s-lbl">Total Leads</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="formLeads">0</div>
+          <div class="s-lbl">From Form</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="chatLeads">0</div>
+          <div class="s-lbl">From Chatbot</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="todayLeads">0</div>
+          <div class="s-lbl">Today's Leads</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Company</th>
+              <th>Service</th>
+              <th>Contact</th>
+              <th>Message</th>
+              <th>Date &amp; Time</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+            <tr><td colspan="9">
+              <div class="empty-state">
+                <div class="empty-ico">📋</div>
+                <p>No leads yet. Leads will appear here once customers submit the form or chat.</p>
+              </div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ EDITABLES PANEL ══ -->
+    <div class="admin-panel" id="panel-editables">
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:6px;">🔧 Editables</h2>
+      <p style="color:var(--gray-600);font-size:.9rem;margin-bottom:28px;">Update your admin credentials securely. Only you have access to these settings.</p>
+
+      <div class="editables-grid">
+
+        <!-- Update Password -->
+        <div class="editable-card">
+          <h3>🔑 Update Password</h3>
+          <p>Change your admin login password. Make sure it's at least 6 characters long.</p>
+          <div class="af-group">
+            <label>Current Password</label>
+            <input type="password" id="currentPass" placeholder="Enter current password" autocomplete="current-password" />
+          </div>
+          <div class="af-group">
+            <label>New Password</label>
+            <input type="password" id="newPass" placeholder="New password (min 6 chars)" autocomplete="new-password" />
+          </div>
+          <div class="af-group">
+            <label>Confirm New Password</label>
+            <input type="password" id="confirmPass" placeholder="Repeat new password" autocomplete="new-password" />
+          </div>
+          <button class="save-btn" id="updatePassBtn">Update Password</button>
+          <div class="update-msg" id="passMsg"></div>
+        </div>
+
+        <!-- Update Email -->
+        <div class="editable-card">
+          <h3>📧 Update Admin Email</h3>
+          <p>Change the email address used to log into the admin panel. Confirm with your password.</p>
+          <div class="af-group">
+            <label>Confirm Current Password</label>
+            <input type="password" id="emailConfirmPass" placeholder="Enter current password" autocomplete="current-password" />
+          </div>
+          <div class="af-group">
+            <label>New Email Address</label>
+            <input type="email" id="newEmail" placeholder="new@email.com" autocomplete="email" />
+          </div>
+          <button class="save-btn" id="updateEmailBtn">Update Email</button>
+          <div class="update-msg" id="emailMsg"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ ABOUT ADMIN PANEL ══ -->
+    <div class="admin-panel" id="panel-about">
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:6px;">👤 About Admin</h2>
+      <p style="color:var(--gray-600);font-size:.9rem;margin-bottom:28px;">Your personal admin profile. All details here are private and editable only by you.</p>
+
+      <div class="admin-card">
+        <h3>Personal Information</h3>
+        <div class="about-form-grid">
+          <div class="af-group">
+            <label>Full Name</label>
+            <input type="text" id="adminName" placeholder="Your full name" />
+          </div>
+          <div class="af-group">
+            <label>Role / Title</label>
+            <input type="text" id="adminRole" placeholder="e.g. Founder & CEO" />
+          </div>
+          <div class="af-group">
+            <label>Phone Number</label>
+            <input type="tel" id="adminPhone" placeholder="Your contact number" />
+          </div>
+          <div class="af-group">
+            <label>Email (Display)</label>
+            <input type="email" id="adminEmail2" placeholder="Your business email" />
+          </div>
+          <div class="af-group">
+            <label>Company</label>
+            <input type="text" id="adminCompany" placeholder="Viyona Digital" />
+          </div>
+          <div class="af-group">
+            <label>Location</label>
+            <input type="text" id="adminLocation" placeholder="City, State" />
+          </div>
+          <div class="af-group">
+            <label>LinkedIn Profile URL</label>
+            <input type="url" id="adminLinkedIn" placeholder="https://linkedin.com/in/..." />
+          </div>
+          <div class="af-group full">
+            <label>Bio / About</label>
+            <textarea id="adminBio" placeholder="A short description about yourself..." rows="4"></textarea>
+          </div>
+        </div>
+        <button class="save-btn" id="saveAboutBtn">Save Profile</button>
+        <div class="update-msg" id="aboutMsg"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
