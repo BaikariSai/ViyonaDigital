@@ -4,7 +4,6 @@
    ============================================================ */
 
 (function () {
-  const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
 
   // ── State ─────────────────────────────────────────────────
   let chatOpen   = false;
@@ -203,23 +202,19 @@ A potential client has just submitted their enquiry with these details:
 Write a warm, encouraging 2–3 sentence closing message. Thank them by first name, confirm their enquiry is received, mention the service they're interested in, and say the team will contact them via their preferred method. Be friendly and professional. Do NOT use markdown.`;
 
     try {
-      const res = await fetch(ANTHROPIC_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 200,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-      const data = await res.json();
-      const msg = data.content?.[0]?.text || defaultClosing(leadData);
-      removeTyping();
-      addBotMsg(`✅ ${msg}`);
-    } catch {
-      removeTyping();
-      addBotMsg(`✅ ${defaultClosing(leadData)}`);
-    }
+  const res = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  const data = await res.json();
+  const msg = data.text || defaultClosing(leadData);
+  removeTyping();
+  addBotMsg(`✅ ${msg}`);
+} catch {
+  removeTyping();
+  addBotMsg(`✅ ${defaultClosing(leadData)}`);
+}
 
     waitingAI = false;
     inputEl.disabled = false;
