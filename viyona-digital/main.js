@@ -23,13 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(form);
 
     const payload = {
-      name: formData.get("name"),
-      mobile: formData.get("mobile"),
-      company: formData.get("company"),
-      service: formData.get("service"),
-      preferred_contact: formData.get("contact"),
-      message: formData.get("message"),
-    };
+     name: formData.get("name") || "",
+     mobile: formData.get("mobile") || "",
+     company: formData.get("company") || "",
+     service: formData.get("service") || "",
+     preferred_contact: formData.get("contact") || "",
+     message: formData.get("message") || ""
+   };
 
     console.log("Submitting:", payload);
 
