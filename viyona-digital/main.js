@@ -1,6 +1,49 @@
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 /* ============================================================
    VIYONA DIGITAL — Main JavaScript
    ============================================================ */
+
+const SUPABASE_URL = "https://sowtktxjkrwratqgfgkc.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvd3RrdHhqa3J3cmF0cWdmZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMTI1MzQsImV4cCI6MjA5MTY4ODUzNH0.REY-XdgXAJjZXzHLt2T2qLILkCRkTcckj54DfJx3MN8";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Wait for DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contactForm");
+
+  if (!form) {
+    console.error("Form not found");
+    return;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    const payload = {
+      name: formData.get("name"),
+      mobile: formData.get("mobile"),
+      company: formData.get("company"),
+      service: formData.get("service"),
+      preferred_contact: formData.get("contact"),
+      message: formData.get("message"),
+    };
+
+    console.log("Submitting:", payload);
+
+    const { error } = await supabase.from("leads").insert([payload]);
+
+    if (error) {
+      console.error("Supabase Error:", error);
+      alert("❌ Failed to send message");
+    } else {
+      alert("✅ Message sent successfully!");
+      form.reset();
+    }
+  });
+});
 
 // ── Navbar ──────────────────────────────────────────────────
 const navbar   = document.getElementById('navbar');
