@@ -3,13 +3,12 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
    VIYONA DIGITAL — Main JavaScript
    ============================================================ */
 
-const SUPABASE_URL = "https://sowtktxjkrwratqgfgkc.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvd3RrdHhqa3J3cmF0cWdmZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMTI1MzQsImV4cCI6MjA5MTY4ODUzNH0.REY-XdgXAJjZXzHLt2T2qLILkCRkTcckj54DfJx3MN8";
+const supabase = createClient(
+  "https://sowtktxjkrwratqgfgkc.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvd3RrdHhqa3J3cmF0cWdmZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMTI1MzQsImV4cCI6MjA5MTY4ODUzNH0.REY-XdgXAJjZXzHLt2T2qLILkCRkTcckj54DfJx3MN8"
+);
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Wait for DOM to load
-document.addEventListener("DOMContentLoaded", () => {
+window.onload = () => {
   const form = document.getElementById("contactForm");
 
   if (!form) {
@@ -20,35 +19,39 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
+    // 👇 DIRECT access (more reliable than FormData for debugging)
+    const name = form.querySelector('[name="name"]').value;
+    const mobile = form.querySelector('[name="mobile"]').value;
+    const company = form.querySelector('[name="company"]').value;
+    const service = form.querySelector('[name="service"]').value;
+    const contact = form.querySelector('[name="contact"]:checked')?.value || "";
+    const message = form.querySelector('[name="message"]').value;
 
-   for (let pair of formData.entries()) {
-     console.log(pair[0], pair[1]);
-   }
+    console.log("Name:", name);
+    console.log("Mobile:", mobile);
 
     const payload = {
-     name: formData.get("name") || "",
-     mobile: formData.get("mobile") || "",
-     company: formData.get("company") || "",
-     service: formData.get("service") || "",
-     preferred_contact: formData.get("contact") || "",
-     message: formData.get("message") || ""
-   };
+      name,
+      mobile,
+      company,
+      service,
+      preferred_contact: contact,
+      message,
+    };
 
-    console.log("Submitting:", payload);
+    console.log("Payload:", payload);
 
     const { error } = await supabase.from("leads").insert([payload]);
 
     if (error) {
-      console.error("Supabase Error:", error);
-      alert("❌ Failed to send message");
+      console.error(error);
+      alert("❌ Failed");
     } else {
-      alert("✅ Message sent successfully!");
+      alert("✅ Success");
       form.reset();
     }
   });
-});
-
+};
 // ── Navbar ──────────────────────────────────────────────────
 const navbar   = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
