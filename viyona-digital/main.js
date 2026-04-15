@@ -260,30 +260,7 @@ setInterval(() => goToReview(currentReview + 1), 5000);
 buildCarousel();
 
 // ── Contact Form ──────────────────────────────────────────────
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const formData = {
-    id:      Date.now(),
-    source:  'Form',
-    name:    this.querySelector('[name="name"]').value.trim(),
-    mobile:  this.querySelector('[name="mobile"]').value.trim(),
-    company: this.querySelector('[name="company"]').value.trim(),
-    service: this.querySelector('[name="service"]').value,
-    contact: this.querySelector('[name="contact"]:checked')?.value || '',
-    message: this.querySelector('[name="message"]').value.trim(),
-    date:    new Date().toLocaleDateString('en-IN'),
-    time:    new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'}),
-  };
 
-  if (!formData.name || !formData.mobile || !formData.service || !formData.contact) {
-    showToast('Please fill all required fields.', 'error');
-    return;
-  }
-
-  saveLead(formData);
-  showToast('Thank you! We\'ll get back to you shortly. 🎉', 'success');
-  this.reset();
-});
 
 // ── Lead Storage ──────────────────────────────────────────────
 function saveLead(lead) {
