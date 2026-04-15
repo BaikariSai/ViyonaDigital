@@ -21,8 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     const formData = new FormData(form);
-     console.log("Name:", formData.get("name"));
-     console.log("Mobile:", formData.get("mobile"));
+
+   for (let pair of formData.entries()) {
+     console.log(pair[0], pair[1]);
+   }
 
     const payload = {
      name: formData.get("name") || "",
