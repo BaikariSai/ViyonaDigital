@@ -48,9 +48,7 @@ const panels   = document.querySelectorAll('.admin-panel');
 const logoutBtn = document.getElementById('logoutBtn');
 
 // ── Check existing session ────────────────────────────────────
-if (sessionStorage.getItem(SESSION_KEY) === '1') {
-  showAdmin();
-}
+
 
 // ── Login ─────────────────────────────────────────────────────
 loginBtn.addEventListener('click', doLogin);
