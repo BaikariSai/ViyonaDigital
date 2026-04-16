@@ -11,8 +11,8 @@ function getCreds() {
   form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPass").value;
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -26,7 +26,7 @@ function getCreds() {
     alert(error.message);
   } else {
     alert("Login success");
-    window.location.href = "dashboard.html";
+    showAdmin()
   }
 });
 
