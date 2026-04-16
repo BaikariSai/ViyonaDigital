@@ -1,25 +1,25 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// 🔑 Replace these
-const supabase = createClient(
-  "https://sowtktxjkrwratqgfgkc.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvd3RrdHhqa3J3cmF0cWdmZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMTI1MzQsImV4cCI6MjA5MTY4ODUzNH0.REY-XdgXAJjZXzHLt2T2qLILkCRkTcckj54DfJx3MN8"
-);
+// 🔑 replace with your real values
+const SUPABASE_URL = "https://sowtktxjkrwratqgfgkc.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvd3RrdHhqa3J3cmF0cWdmZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMTI1MzQsImV4cCI6MjA5MTY4ODUzNH0.REY-XdgXAJjZXzHLt2T2qLILkCRkTcckj54DfJx3MN8";
 
-window.onload = () => {
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+window.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
 
   if (!form) {
-    console.error("Form not found ❌");
+    console.error("❌ contactForm not found");
     return;
   }
 
-  console.log("Form connected ✅");
+  console.log("✅ Supabase form connected");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // 🔥 Direct value extraction (NO FormData issues)
+    // ✅ DIRECT value reading (no FormData bugs)
     const name = form.querySelector('[name="name"]').value.trim();
     const mobile = form.querySelector('[name="mobile"]').value.trim();
     const company = form.querySelector('[name="company"]').value.trim();
@@ -27,11 +27,10 @@ window.onload = () => {
     const contact = form.querySelector('[name="contact"]:checked')?.value || "";
     const message = form.querySelector('[name="message"]').value.trim();
 
-    console.log({ name, mobile, company, service, contact, message });
+    console.log("Submitting:", { name, mobile, company, service, contact, message });
 
-    // 🚨 basic validation
     if (!name || !mobile || !service || !contact) {
-      alert("Please fill all required fields ⚠️");
+      alert("Please fill all required fields");
       return;
     }
 
@@ -47,11 +46,11 @@ window.onload = () => {
     ]);
 
     if (error) {
-      console.error(error);
-      alert("❌ Failed to submit");
+      console.error("❌ Supabase error:", error);
+      alert("Submission failed");
     } else {
-      alert("✅ Message sent!");
+      alert("✅ Message sent successfully");
       form.reset();
     }
   });
-};
+});
