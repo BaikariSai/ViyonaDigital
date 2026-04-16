@@ -8,11 +8,27 @@ const CREDS_KEY        = 'vd_admin_creds';
 const SESSION_KEY      = 'vd_admin_session';
 
 function getCreds() {
-  const stored = localStorage.getItem(CREDS_KEY);
-  if (stored) return JSON.parse(stored);
-  // default creds
-  return { email: 'admin@viyonadigital.com', password: DEFAULT_PASSWORD };
-}
+  form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Login success");
+    window.location.href = "dashboard.html";
+  }
+});
 
 function saveCreds(creds) {
   localStorage.setItem(CREDS_KEY, JSON.stringify(creds));
